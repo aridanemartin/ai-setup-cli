@@ -20,7 +20,7 @@ export const TOOLS: Tool[] = [
   {
     id: 'opencode',
     label: 'OpenCode + Codex',
-    hint: 'AGENTS.md, opencode.json',
+    hint: 'AGENTS.md, opencode.json, prompts/',
   },
   {
     id: 'gemini-cli',

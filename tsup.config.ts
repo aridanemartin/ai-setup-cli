@@ -7,5 +7,6 @@ export default defineConfig({
   outDir: 'dist',
   clean: true,
   bundle: true,
+  noExternal: ['@clack/prompts', '@clack/core'],
   banner: { js: '#!/usr/bin/env node' },
 })

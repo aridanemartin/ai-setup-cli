@@ -7,6 +7,17 @@ const args = process.argv.slice(2)
 const dryRun = args.includes('--dry-run')
 const yes = args.includes('--yes')
 
+if (args.includes('--help') || args.includes('-h')) {
+  console.log(
+    'Usage: npx ai-setup-cli [--dry-run] [--yes]\n\n' +
+    'Options:\n' +
+    '  --dry-run  List files that would be written without writing them\n' +
+    '  --yes      Overwrite all existing files without prompting\n' +
+    '  --help     Show this help message'
+  )
+  process.exit(0)
+}
+
 async function main(): Promise<void> {
   p.intro('ai-setup-cli — AI tool configuration installer')
 
