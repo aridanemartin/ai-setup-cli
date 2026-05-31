@@ -12,6 +12,9 @@ CLAUDE.md                          ← Main project instructions for Claude
 .claude/rules/testing.md           ← Testing rules
 .claude/hooks/protect-files.sh     ← Hook that prevents overwriting key files
 .claude/skills/example-skill/      ← Starter skill template (rename and fill in)
+.claude/commands/review.md         ← /review slash command — code review on staged changes
+.claude/commands/document.md       ← /document slash command — generate inline docs
+.claude/agents/code-reviewer.md    ← Sub-agent focused on review only (read-only tools)
 .mcp.json                          ← MCP server config (add your servers here)
 ```
 

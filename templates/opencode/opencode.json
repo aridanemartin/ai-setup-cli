@@ -13,6 +13,7 @@
     "plan": {
       "mode": "primary",
       "model": "anthropic/claude-haiku-4-20250514",
+      "prompt": "{file:./prompts/plan.txt}",
       "permission": {
         "edit": "deny",
         "bash": "deny"
@@ -22,7 +23,7 @@
       "description": "Reviews code for security, performance, and maintainability",
       "mode": "subagent",
       "model": "anthropic/claude-sonnet-4-20250514",
-      "prompt": "You are a code reviewer. Focus on security vulnerabilities, performance issues (N+1 queries, blocking I/O), and maintainability (clear naming, small functions). Be concise and actionable.",
+      "prompt": "{file:./prompts/code-reviewer.txt}",
       "permission": {
         "edit": "deny",
         "bash": "deny"
