@@ -4,7 +4,7 @@
   "description": "One command to configure any AI coding tool in your project",
   "type": "commonjs",
   "bin": {
-    "ai-setup-cli": "./dist/cli.js"
+    "ai-setup-cli": "dist/cli.js"
   },
   "files": [
     "dist",
@@ -31,10 +31,12 @@
   "author": "Aridane Martin",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aridanemartin/ai-setup-cli.git"
+    "url": "git+https://github.com/aridanemartin/ai-setup-cli.git"
   },
   "homepage": "https://github.com/aridanemartin/ai-setup-cli#readme",
-  "bugs": { "url": "https://github.com/aridanemartin/ai-setup-cli/issues" },
+  "bugs": {
+    "url": "https://github.com/aridanemartin/ai-setup-cli/issues"
+  },
   "engines": {
     "node": ">=18"
   },
