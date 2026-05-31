@@ -4,7 +4,6 @@ on:
   push:
     branches: [main]
 
-# Skip if the push is the version-bump commit we made ourselves
 concurrency:
   group: release
   cancel-in-progress: false
@@ -12,18 +11,15 @@ concurrency:
 jobs:
   release:
     runs-on: ubuntu-latest
-    # Avoid re-running on the version-bump commit pushed by this workflow
+    # Skip the version-bump commit that this workflow pushes back to main
     if: "!contains(github.event.head_commit.message, '[skip release]')"
 
     permissions:
-      contents: write  # needed to push version bump commit + tag
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
         with:
-          # Use a PAT so the pushed version-bump commit can trigger other workflows.
-          # Falls back to GITHUB_TOKEN if PAT is not set (push will still work but
-          # won't re-trigger other workflows — fine for most projects).
           token: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
@@ -35,28 +31,56 @@ jobs:
       - run: npm ci
 
       # Determine bump type from the latest commit message.
-      # feat:       → minor
-      # BREAKING CHANGE (anywhere in message) → major
-      # fix: / refactor: / perf: / everything else → patch
-      # chore: / docs: / test: / ci: / style: / build: → skip (no publish)
+      # feat:                        → minor
+      # BREAKING CHANGE in message   → major
+      # fix: / refactor: / perf: / anything else → patch
+      # chore: / docs: / test: / ci: / style: / build: → skip
       - name: Determine version bump
         id: bump
         run: |
-          MSG="${{ github.event.head_commit.message }}"
-          echo "Commit: $MSG"
+          MSG=$(git log -1 --format=%B)
+          echo "Commit message: $MSG"
 
           if echo "$MSG" | grep -qiE 'BREAKING[[:space:]]CHANGE'; then
-            echo "type=major" >> $GITHUB_OUTPUT
+            echo "type=major" >> "$GITHUB_OUTPUT"
           elif echo "$MSG" | grep -qE '^feat(\(.+\))?[!]?:'; then
-            echo "type=minor" >> $GITHUB_OUTPUT
+            echo "type=minor" >> "$GITHUB_OUTPUT"
           elif echo "$MSG" | grep -qE '^(chore|docs|test|ci|style|build)(\(.+\))?:'; then
-            echo "type=skip" >> $GITHUB_OUTPUT
+            echo "type=skip" >> "$GITHUB_OUTPUT"
           else
-            echo "type=patch" >> $GITHUB_OUTPUT
+            echo "type=patch" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Compute the next version string and check whether its tag already exists.
+      # This makes the step idempotent: a duplicate run won't re-tag and re-publish.
+      - name: Compute next version
+        id: next
+        if: steps.bump.outputs.type != 'skip'
+        run: |
+          CURRENT=$(node -p "require('./package.json').version")
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT"
+          TYPE="${{ steps.bump.outputs.type }}"
+
+          if [ "$TYPE" = "major" ]; then
+            NEXT="$((MAJOR + 1)).0.0"
+          elif [ "$TYPE" = "minor" ]; then
+            NEXT="$MAJOR.$((MINOR + 1)).0"
+          else
+            NEXT="$MAJOR.$MINOR.$((PATCH + 1))"
+          fi
+
+          echo "version=v$NEXT" >> "$GITHUB_OUTPUT"
+          echo "Next version: v$NEXT"
+
+          if git ls-remote --tags origin "refs/tags/v$NEXT" | grep -q .; then
+            echo "already_released=true" >> "$GITHUB_OUTPUT"
+            echo "Tag v$NEXT already exists — skipping release"
+          else
+            echo "already_released=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Bump version and tag
-        if: steps.bump.outputs.type != 'skip'
+        if: steps.bump.outputs.type != 'skip' && steps.next.outputs.already_released != 'true'
         run: |
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
@@ -65,7 +89,7 @@ jobs:
           git push --follow-tags
 
       - name: Publish to npm
-        if: steps.bump.outputs.type != 'skip'
+        if: steps.bump.outputs.type != 'skip' && steps.next.outputs.already_released != 'true'
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
