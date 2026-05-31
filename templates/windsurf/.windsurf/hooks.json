@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "pre_write_code": [
+      {
+        "command": "bash .windsurf/scripts/protect-files.sh",
+        "show_output": true
+      }
+    ],
+    "post_write_code": [
+      {
+        "command": "echo \"[$(date -u +%FT%TZ)] edited: $(echo $HOOK_INPUT | jq -r '.tool_info.file_path // empty')\" >> .windsurf/write.log",
+        "show_output": false
+      }
+    ]
+  }
+}

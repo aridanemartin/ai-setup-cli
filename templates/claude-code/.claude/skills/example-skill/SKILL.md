@@ -1,32 +1,25 @@
 ---
 name: example-skill
-description: Use when [describe the triggering conditions and symptoms that signal this skill applies]
+description: Use when [specific trigger condition — e.g. "user asks to write a commit message"]. SKIP when [counter-condition — e.g. "user wants to push or create a PR"].
 ---
 
-# Example Skill
+[One imperative sentence telling the agent what to do immediately. No ## Overview heading — this IS the overview.]
 
-## Overview
+## Steps
 
-[Describe what this skill does in 1-2 sentences.]
-
-## When to Use
-
-- [Situation or symptom 1]
-- [Situation or symptom 2]
-
-**Not for:** [situations where this skill does NOT apply]
-
-## Core Pattern
-
-[Describe the pattern, technique, or reference material.]
+1. **[First action]** — [what to do + command or code]
+2. **[Second action]** — [what to do + command or code]
+3. **Verify** — [how to confirm success]
 
 ## Quick Reference
 
-| Operation | Example |
-|-----------|---------|
-| [Step 1]  | `code`  |
-| [Step 2]  | `code`  |
+| Situation         | Command / approach     |
+|-------------------|------------------------|
+| [Normal case]     | `example command`      |
+| [Edge case]       | `example command`      |
 
-## Common Mistakes
+## Constraints
 
-- **[Mistake]:** [What goes wrong and how to fix it]
+- Never [dangerous or irreversible action] without explicit approval
+- Always [safety rule]
+- Ask before [risky operation]

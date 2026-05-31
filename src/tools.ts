@@ -32,6 +32,11 @@ export const TOOLS: Tool[] = [
     label: 'Cursor',
     hint: '.cursor/rules/, .cursorignore',
   },
+  {
+    id: 'windsurf',
+    label: 'Windsurf',
+    hint: '.windsurf/rules/, workflows/, skills/, hooks.json',
+  },
 ]
 
 export function templatesDir(): string {
