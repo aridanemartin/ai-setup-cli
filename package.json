@@ -28,6 +28,11 @@
     "cli"
   ],
   "license": "MIT",
+  "author": "Aridane Martin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aridanemartin/ai-setup-cli.git"
+  },
   "engines": {
     "node": ">=18"
   },
