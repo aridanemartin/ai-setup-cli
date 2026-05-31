@@ -1,0 +1,71 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+# Skip if the push is the version-bump commit we made ourselves
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    # Avoid re-running on the version-bump commit pushed by this workflow
+    if: "!contains(github.event.head_commit.message, '[skip release]')"
+
+    permissions:
+      contents: write  # needed to push version bump commit + tag
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Use a PAT so the pushed version-bump commit can trigger other workflows.
+          # Falls back to GITHUB_TOKEN if PAT is not set (push will still work but
+          # won't re-trigger other workflows — fine for most projects).
+          token: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      - run: npm ci
+
+      # Determine bump type from the latest commit message.
+      # feat:       → minor
+      # BREAKING CHANGE (anywhere in message) → major
+      # fix: / refactor: / perf: / everything else → patch
+      # chore: / docs: / test: / ci: / style: / build: → skip (no publish)
+      - name: Determine version bump
+        id: bump
+        run: |
+          MSG="${{ github.event.head_commit.message }}"
+          echo "Commit: $MSG"
+
+          if echo "$MSG" | grep -qiE 'BREAKING[[:space:]]CHANGE'; then
+            echo "type=major" >> $GITHUB_OUTPUT
+          elif echo "$MSG" | grep -qE '^feat(\(.+\))?[!]?:'; then
+            echo "type=minor" >> $GITHUB_OUTPUT
+          elif echo "$MSG" | grep -qE '^(chore|docs|test|ci|style|build)(\(.+\))?:'; then
+            echo "type=skip" >> $GITHUB_OUTPUT
+          else
+            echo "type=patch" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Bump version and tag
+        if: steps.bump.outputs.type != 'skip'
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          npm version ${{ steps.bump.outputs.type }} \
+            --message "chore: release %s [skip release]"
+          git push --follow-tags
+
+      - name: Publish to npm
+        if: steps.bump.outputs.type != 'skip'
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
