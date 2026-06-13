@@ -11,7 +11,7 @@ CLAUDE.md                          ← Main project instructions for Claude
 .claude/rules/security.md          ← Security rules
 .claude/rules/testing.md           ← Testing rules
 .claude/hooks/protect-files.sh     ← Hook that prevents overwriting key files
-.claude/skills/example-skill/      ← Starter skill template (rename and fill in)
+.claude/skills/write-commit/       ← Skill: generates conventional commit messages
 .claude/commands/review.md         ← /review slash command — code review on staged changes
 .claude/commands/document.md       ← /document slash command — generate inline docs
 .claude/agents/code-reviewer.md    ← Sub-agent focused on review only (read-only tools)
@@ -21,7 +21,7 @@ CLAUDE.md                          ← Main project instructions for Claude
 ## Next Steps
 
 1. **Edit `CLAUDE.md`** — replace the placeholder comments with your project's actual name, commands, and conventions
-2. **Rename and fill in the example skill** — or delete `.claude/skills/example-skill/` if you don't need custom skills yet
+2. **Copy or extend the `write-commit` skill** — add your own skills under `.claude/skills/<name>/SKILL.md`
 3. **Add MCP servers** to `.mcp.json` if you use any (e.g. context7, filesystem)
 4. **Delete this file**
 

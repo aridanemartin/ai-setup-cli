@@ -13,6 +13,7 @@ AGENTS.md                                ← Always-on agent instructions (root 
 .windsurf/workflows/review.md           ← /review workflow — code review on current branch
 .windsurf/workflows/commit.md           ← /commit workflow — conventional commit helper
 .windsurf/skills/write-commit/SKILL.md  ← Skill invoked automatically or via /write-commit
+.windsurf/agents/code-reviewer.md       ← Sub-agent for focused code review (read-only)
 .windsurf/hooks.json                    ← pre/post write hooks (protect files + audit log)
 .windsurf/scripts/protect-files.sh      ← Script called by pre_write_code hook
 ```
@@ -32,6 +33,7 @@ AGENTS.md                                ← Always-on agent instructions (root 
 | Rules | `.windsurf/rules/` | Workspace (commit to git) |
 | Workflows | `.windsurf/workflows/` | Workspace (commit to git) |
 | Skills | `.windsurf/skills/` | Workspace (commit to git) |
+| Agents | `.windsurf/agents/` | Workspace (commit to git) |
 | Hooks | `.windsurf/hooks.json` | Workspace (commit to git) |
 | Agent instructions | `AGENTS.md` | Directory-scoped |
 | MCP servers | `~/.codeium/windsurf/mcp_config.json` | Global only (not project-level) |

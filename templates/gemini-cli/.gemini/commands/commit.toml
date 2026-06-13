@@ -1,0 +1,18 @@
+# Invoked via: /commit
+# Reads the staged diff and writes a conventional commit message, then commits.
+
+description = "Read the staged diff and write a conventional commit message, then commit."
+
+prompt = """
+Read the staged diff and create a conventional commit.
+
+Steps:
+1. Run shell("git diff --cached") — if empty, run shell("git status") to see unstaged changes
+2. Stage specific files if needed using shell("git add <file>") — never git add -A without showing the user
+3. Write a commit message: type: short imperative description (under 72 chars)
+4. Run shell("git commit -m '<message>'") — never use --no-verify
+
+Commit types: feat (new feature), fix (bug), chore (config/tooling), refactor (internal), docs, test.
+
+Never push without explicit user approval. Never skip pre-commit hooks.
+"""

@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "command": "bash .cursor/hooks/protect-files.sh"
+      }
+    ],
+    "postToolUse": [
+      {
+        "command": "bash .cursor/hooks/audit-tool.sh"
+      }
+    ]
+  }
+}

@@ -26,9 +26,3 @@
 - Edit source files in `src/`
 - Do not modify `package-lock.json`, `.env`, or CI config without asking
 - Do not run destructive shell commands (`rm -rf`, `git reset --hard`) without asking
-
-## Available agents
-
-- **build** — primary agent, can read and edit
-- **plan** — planning agent, read-only
-- **code-reviewer** — sub-agent for security + correctness review, read-only
