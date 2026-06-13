@@ -1,6 +1,6 @@
 {
   "name": "ai-setup-cli",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "One command to configure any AI coding tool in your project",
   "type": "commonjs",
   "bin": {
