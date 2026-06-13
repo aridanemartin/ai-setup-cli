@@ -1,6 +1,6 @@
 ---
 name: write-commit
-description: Use when committing changes — reads the diff and writes a conventional commit message. SKIP if the user wants to push or open a PR.
+description: Generates a conventional commit message by analyzing the git diff and commits the staged changes. Use when the user asks to commit changes. Skip if the user wants to push or open a PR.
 ---
 
 Read the staged diff, write a conventional commit message, and commit.
