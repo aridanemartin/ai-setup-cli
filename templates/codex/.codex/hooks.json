@@ -1,0 +1,28 @@
+{
+  "hooks": {
+    "preToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .codex/hooks/protect-files.sh",
+            "statusMessage": "Checking file protection rules"
+          }
+        ]
+      }
+    ],
+    "postToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .codex/hooks/audit-tool.sh",
+            "statusMessage": "Logging tool usage"
+          }
+        ]
+      }
+    ]
+  }
+}

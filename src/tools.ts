@@ -28,6 +28,11 @@ export const TOOLS: Tool[] = [
     hint: 'GEMINI.md, .geminiignore',
   },
   {
+    id: 'codex',
+    label: 'Codex CLI',
+    hint: '.codex/config.toml, .codexignore, AGENTS.md',
+  },
+  {
     id: 'cursor',
     label: 'Cursor',
     hint: '.cursor/rules/, .cursorignore',

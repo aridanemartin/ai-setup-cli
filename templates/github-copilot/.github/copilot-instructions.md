@@ -11,27 +11,13 @@
 - Prefer early returns to reduce nesting
 - No commented-out code in pull requests
 
-## Security
+## Modular instructions
 
-- Never hardcode credentials, API keys, or tokens — use environment variables
-- Validate and sanitize all user input before processing or persisting
-- Use parameterized queries — never concatenate SQL strings
-- Do not log sensitive data (passwords, tokens, full card numbers, PII)
+Additional standards are available in `.github/instructions/`:
+- `typescript.instructions.md` — TypeScript, module system, exports
+- `testing.instructions.md` — Test placement, runner, patterns
+- `security.instructions.md` — Secrets, validation, SQL, headers
+- `documentation.instructions.md` — API docs, README, changelog
+- `code-review.instructions.md` — Review priorities and output format
 
-## Error handling
-
-- Handle errors at the boundary where they can be acted on
-- Log failures with enough context to debug (operation, inputs, error message)
-- Fail fast on invalid configuration — do not silently continue
-
-## Documentation
-
-- All public functions and methods must have doc comments
-- Complex algorithms need an inline comment explaining the approach
-- Keep the README up to date when changing public interfaces
-
-## Review style
-
-- Be concise and actionable — explain the *why* behind recommendations
-- Flag security issues and potential data integrity problems first
-- Call out N+1 queries and per-request synchronous network calls
+These are loaded automatically by Copilot alongside this file.

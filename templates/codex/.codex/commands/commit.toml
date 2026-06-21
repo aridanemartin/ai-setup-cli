@@ -1,0 +1,4 @@
+name = "commit"
+description = "Generate a conventional commit message"
+args = ["diff"]
+run = "codex .codex/skills/write-commit/SKILL.md"

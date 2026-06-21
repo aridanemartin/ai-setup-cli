@@ -13,6 +13,7 @@ Installs ready-to-use config files for the tool(s) you pick. Edit them to match 
 | Tool | Instruction file |
 |------|-----------------|
 | [Claude Code](https://claude.ai/code) | `CLAUDE.md` |
+| [Codex CLI](https://github.com/openai/codex) | `AGENTS.md` |
 | [Cursor](https://cursor.com) | `AGENTS.md` |
 | [Gemini CLI](https://github.com/google-gemini/gemini-cli) | `GEMINI.md` |
 | [GitHub Copilot](https://github.com/features/copilot) | `.github/copilot-instructions.md` |
@@ -54,6 +55,24 @@ Installs ready-to-use config files for the tool(s) you pick. Edit them to match 
 | `.cursor/mcp.json` | Project-scoped MCP server definitions |
 | `.cursorignore` | Files excluded from Cursor's context |
 
+### Codex CLI
+
+| File | Purpose |
+|------|---------|
+| `AGENTS.md` | Project instructions |
+| `.codex/config.toml` | Codex CLI config: model, sandbox mode, approval policy |
+| `.codexignore` | Files excluded from Codex's context |
+| `.codex/hooks.json` | Hook definitions |
+| `.codex/hooks/protect-files.sh` | Prevents editing sensitive files |
+| `.codex/hooks/audit-tool.sh` | Logs tool calls |
+| `.codex/rules/general.toml` | General coding rules |
+| `.codex/rules/testing.toml` | Test conventions |
+| `.codex/rules/components.toml` | Component conventions |
+| `.codex/agents/code-reviewer.toml` | Code reviewer agent |
+| `.codex/commands/review.toml` | Review command |
+| `.codex/commands/commit.toml` | Commit command |
+| `.codex/skills/write-commit/SKILL.md` | `write-commit` skill |
+
 ### Gemini CLI
 
 | File | Purpose |
@@ -72,6 +91,11 @@ Installs ready-to-use config files for the tool(s) you pick. Edit them to match 
 |------|---------|
 | `AGENTS.md` | Project instructions |
 | `.github/copilot-instructions.md` | Repository-wide instructions |
+| `.github/instructions/typescript.instructions.md` | TypeScript conventions |
+| `.github/instructions/testing.instructions.md` | Testing conventions |
+| `.github/instructions/security.instructions.md` | Security conventions |
+| `.github/instructions/documentation.instructions.md` | Documentation conventions |
+| `.github/instructions/code-review.instructions.md` | Code review priorities |
 | `.github/agents/code-reviewer.agent.md` | Code reviewer agent |
 | `.github/prompts/review.prompt.md` | Review prompt |
 | `.github/prompts/write-commit.prompt.md` | Write commit prompt |
