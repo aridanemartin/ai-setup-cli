@@ -1,0 +1,26 @@
+name = "create-pr"
+description = "Create a pull request with a conventional commit and auto-generated description"
+
+prompt = """
+Create a pull request using `gh pr create`.
+
+Steps:
+1. Ask: "Do you want to reference a task/issue? If yes, provide the number or context."
+2. Analyze staged changes: shell("git diff --cached")
+3. Generate a conventional commit message: <type>(<scope>): <subject>
+   Types: feat, fix, docs, refactor, test, chore
+4. Auto-generate a PR title from the task title (if provided) or the commit summary
+5. Build a PR description from commits and diff — include a checklist
+6. Show the title and description for confirmation before creating
+7. Run: shell("gh pr create --title '...' --body '...'")
+
+Constraints:
+- Always confirm title and description with the user before publishing
+- Ensure the PR title is clear and descriptive, not just a diff summary
+
+PR checklist:
+- [ ] Commit message follows conventional commit format
+- [ ] PR title is clear and descriptive
+- [ ] PR description includes context, changes, and verification steps
+- [ ] All changes are clear and maintainable
+"""

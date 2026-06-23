@@ -5,29 +5,21 @@
     "paths": [".opencode/skills"]
   },
   "agent": {
-    "build": {
-      "mode": "primary",
-      "model": "anthropic/claude-sonnet-4-6",
-      "prompt": "{file:./prompts/build.txt}",
-      "permission": {
-        "edit": "allow",
-        "bash": "allow"
-      }
-    },
-    "plan": {
-      "mode": "primary",
-      "model": "anthropic/claude-sonnet-4-6",
-      "prompt": "{file:./prompts/plan.txt}",
-      "permission": {
-        "edit": "deny",
-        "bash": "deny"
-      }
-    },
     "code-reviewer": {
       "description": "Use for focused code review — security, correctness, and maintainability. Does not edit files.",
       "mode": "subagent",
       "model": "anthropic/claude-sonnet-4-6",
       "prompt": "{file:./prompts/code-reviewer.txt}",
+      "permission": {
+        "edit": "deny",
+        "bash": "deny"
+      }
+    },
+    "accessibility-reviewer": {
+      "description": "Read-only accessibility specialist. Audits UI code against WCAG 2.2 Level AA and flags likely EU/Spain accessibility obligations.",
+      "mode": "subagent",
+      "model": "anthropic/claude-sonnet-4-6",
+      "prompt": "{file:./prompts/accessibility-reviewer.txt}",
       "permission": {
         "edit": "deny",
         "bash": "deny"

@@ -1,4 +1,0 @@
-name = "review"
-description = "Review staged changes against project conventions"
-args = ["diff"]
-run = "codex .codex/agents/code-reviewer.toml"
