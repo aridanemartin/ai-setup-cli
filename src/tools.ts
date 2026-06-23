@@ -38,9 +38,9 @@ export const TOOLS: Tool[] = [
     hint: '.cursor/rules/, .cursorignore',
   },
   {
-    id: 'windsurf',
-    label: 'Windsurf',
-    hint: '.windsurf/rules/, workflows/, skills/, hooks.json',
+    id: 'devin',
+    label: 'Devin',
+    hint: '.devin/rules/, .windsurf/workflows/, skills/, hooks.json',
   },
 ]
 

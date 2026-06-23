@@ -24,7 +24,7 @@ If you run this with an older Node.js version (for example 20.10.0), the CLI may
 | [Gemini CLI](https://github.com/google-gemini/gemini-cli) | `GEMINI.md` |
 | [GitHub Copilot](https://github.com/features/copilot) | `.github/copilot-instructions.md` |
 | [OpenCode](https://opencode.ai) | `AGENTS.md` |
-| [Windsurf](https://windsurf.com) | `AGENTS.md` |
+| [Devin](https://devin.ai) | `AGENTS.md` |
 
 ## Files installed
 
@@ -118,21 +118,21 @@ If you run this with an older Node.js version (for example 20.10.0), the CLI may
 | `prompts/code-reviewer.txt` | System prompt for the `code-reviewer` agent |
 | `.opencode/skills/write-commit/SKILL.md` | `write-commit` skill |
 
-### Windsurf
+### Devin
 
 | File | Purpose |
 |------|---------|
 | `AGENTS.md` | Project instructions |
-| `.windsurf/rules/general.md` | General rules applied to all files |
-| `.windsurf/rules/components.md` | Component conventions |
-| `.windsurf/rules/testing.md` | Test conventions |
+| `.devin/rules/general.md` | General rules applied to all files |
+| `.devin/rules/components.md` | Component conventions |
+| `.devin/rules/testing.md` | Test conventions |
 | `.windsurf/hooks.json` | Hook definitions |
 | `.windsurf/scripts/protect-files.sh` | Prevents editing protected files |
 | `.windsurf/agents/code-reviewer.md` | Code reviewer agent |
 | `.windsurf/workflows/commit.md` | Commit workflow |
 | `.windsurf/workflows/review.md` | Review workflow |
 | `.windsurf/skills/write-commit/SKILL.md` | `write-commit` skill |
-| `.codeiumignore` | Files excluded from Windsurf's context |
+| `.codeiumignore` | Files excluded from Devin's context |
 
 ## CLI flags
 

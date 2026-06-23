@@ -6,10 +6,10 @@ This file was created by `ai-setup-cli`. Read it once, then delete it.
 
 ```
 AGENTS.md                                ← Always-on agent instructions (root = global scope)
-.codeiumignore                           ← Files excluded from Windsurf context indexing
-.windsurf/rules/general.md              ← Always-on coding style rules
-.windsurf/rules/testing.md              ← Rules activated on *.test.ts / *.spec.ts files
-.windsurf/rules/components.md           ← Rules activated on src/components/**/*.tsx
+.codeiumignore                           ← Files excluded from Devin context indexing
+.devin/rules/general.md                 ← Always-on coding style rules
+.devin/rules/testing.md                 ← Rules activated on *.test.ts / *.spec.ts files
+.devin/rules/components.md              ← Rules activated on src/components/**/*.tsx
 .windsurf/workflows/review.md           ← /review workflow — code review on current branch
 .windsurf/workflows/commit.md           ← /commit workflow — conventional commit helper
 .windsurf/skills/write-commit/SKILL.md  ← Skill invoked automatically or via /write-commit
@@ -21,16 +21,16 @@ AGENTS.md                                ← Always-on agent instructions (root 
 ## Next Steps
 
 1. **Edit `AGENTS.md`** — replace the placeholder comments with your project description and architecture
-2. **Add more rules** — create `.windsurf/rules/your-rule.md` with `trigger: always_on` or `trigger: glob`
+2. **Add more rules** — create `.devin/rules/your-rule.md` with `trigger: always_on` or `trigger: glob`
 3. **Add more workflows** — create `.windsurf/workflows/your-workflow.md` (invoke via Cascade chat)
 4. **Make the protect-files.sh executable** — `chmod +x .windsurf/scripts/protect-files.sh`
 5. **Delete this file**
 
-## Windsurf Feature Map
+## Devin Feature Map
 
 | Feature | Directory | Scope |
 |---------|-----------|-------|
-| Rules | `.windsurf/rules/` | Workspace (commit to git) |
+| Rules | `.devin/rules/` | Workspace (commit to git) |
 | Workflows | `.windsurf/workflows/` | Workspace (commit to git) |
 | Skills | `.windsurf/skills/` | Workspace (commit to git) |
 | Agents | `.windsurf/agents/` | Workspace (commit to git) |
@@ -40,4 +40,4 @@ AGENTS.md                                ← Always-on agent instructions (root 
 
 ## Resources
 
-- Windsurf docs: https://docs.windsurf.com
+- Devin docs: https://docs.devin.ai
