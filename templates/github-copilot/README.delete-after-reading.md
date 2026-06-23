@@ -21,10 +21,34 @@ AGENTS.md                                   ← Project-level instructions (read
 ## Next Steps
 
 1. **Edit `AGENTS.md`** — replace placeholder comments with your project description and conventions
-2. **Edit `.github/copilot-instructions.md`** — replace the repository context placeholder with your actual repo description
-3. **Review instruction files** — `.github/instructions/*.instructions.md` are loaded automatically; adjust them to match your project
+2. **Edit `.github/copilot-instructions.md`** — fill in the Repository overview, Build & validation, and Project layout sections. Validate every command by running it yourself
+3. **Review instruction files** — `.github/instructions/*.instructions.md` are loaded automatically based on each file's `applyTo` glob. Adjust the glob or content to match your project
 4. **Use prompts** — reference `.github/prompts/review.prompt.md` in Copilot Chat with `#file`
 5. **Delete this file**
+
+## Instruction file frontmatter
+
+Files in `.github/instructions/` **must** start with frontmatter containing an `applyTo` glob — Copilot uses it to decide when the instructions activate:
+
+```markdown
+---
+applyTo: "**/*.ts,**/*.tsx"
+---
+
+## TypeScript conventions
+...
+```
+
+Glob examples:
+
+| Pattern | Matches |
+|---------|---------|
+| `**` | All files (use for cross-cutting concerns like security) |
+| `**/*.ts,**/*.tsx` | All TypeScript files recursively |
+| `src/**/*.py` | Python files under `src/` at any depth |
+| `**/*.test.*,**/*.spec.*` | All test files |
+
+Optional `excludeAgent: "code-review"` or `"cloud-agent"` keeps a file from being used by those Copilot features.
 
 ## GitHub Copilot Feature Map
 
