@@ -8,6 +8,12 @@ npx ai-setup-cli
 
 Installs ready-to-use config files for the tool(s) you pick. Edit them to match your project.
 
+## Requirements
+
+- Node.js >= 20.12.0
+
+If you run this with an older Node.js version (for example 20.10.0), the CLI may fail at startup with a `styleText` runtime error.
+
 ## Tools
 
 | Tool | Instruction file |
