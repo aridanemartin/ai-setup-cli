@@ -29,6 +29,13 @@ globs: ["**/*.test.*", "**/*.spec.*", "**/*_test.*", "**/test_*.*", "**/tests/**
 - Run the single relevant test while iterating; only run the full suite before committing
 - Never commit a skipped or disabled test without an inline comment explaining why and when it will be re-enabled
 
+## Performance
+
+- Treat test suite speed as a first-class concern — slow suites get skipped
+- If multiple assertions can be verified from a single render, call, or endpoint request, group them in one test rather than repeating the expensive operation
+- Reserve separate tests for genuinely distinct behaviours, not for each assertion about the same call
+- Scope `beforeEach` setup as tightly as possible — don't run expensive operations for tests that don't need them
+
 ## Isolation and dependencies
 
 - Each test must be independent — no test should rely on another test's output or side effects
