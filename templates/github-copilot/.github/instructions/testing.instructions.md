@@ -1,3 +1,11 @@
+---
+applyTo: "**/*.test.*,**/*.spec.*,**/tests/**,**/__tests__/**"
+---
+
+<!-- TIP 3 — Coding Guidelines (scoped): This file only loads when Copilot is editing test
+     files. Scoping prevents testing conventions from appearing in context during unrelated
+     tasks, and lets you be more prescriptive here without adding noise elsewhere. -->
+
 ## Testing conventions
 
 - Test files live next to source: `foo.ts` → `foo.test.ts`

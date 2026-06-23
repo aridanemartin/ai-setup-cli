@@ -1,3 +1,12 @@
+---
+applyTo: "**/*.ts,**/*.tsx"
+---
+
+<!-- TIP 3 — Coding Guidelines (scoped): The applyTo frontmatter above means this file only
+     loads when Copilot is editing TypeScript files. Scoping keeps rules focused: TypeScript
+     conventions don't need to be in context during Markdown or YAML edits. This is how you
+     stay specific without overwhelming the main instruction file. -->
+
 ## TypeScript conventions
 
 - Use ES modules (`import`/`export`), not CommonJS

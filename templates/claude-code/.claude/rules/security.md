@@ -1,3 +1,8 @@
+<!-- TIP 3 — Coding Guidelines (security): Security rules apply to all files, so this rule
+     has no paths frontmatter and loads unconditionally at every session. It gets its own
+     file because: (a) it applies everywhere, (b) the stakes are high enough to deserve
+     dedicated attention, and (c) it's easy to forget under deadline pressure. -->
+
 # Security
 
 - Never hardcode secrets, tokens, or API keys — use environment variables

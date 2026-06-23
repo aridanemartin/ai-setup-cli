@@ -1,3 +1,11 @@
+---
+applyTo: "**"
+---
+
+<!-- TIP 3 — Coding Guidelines (review): A dedicated review file means Copilot applies a
+     consistent evaluation order rather than ad-hoc judgement. Separating it from other
+     conventions also makes it easy to update the review process independently. -->
+
 ## Code review priorities
 
 Evaluate changes in this order:
