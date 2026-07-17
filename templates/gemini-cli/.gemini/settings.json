@@ -1,0 +1,28 @@
+{
+  "hooks": {
+    "BeforeTool": [
+      {
+        "matcher": "write_file|replace",
+        "hooks": [
+          {
+            "name": "protect-files",
+            "type": "command",
+            "command": "bash .gemini/hooks/pre-tool.sh"
+          }
+        ]
+      }
+    ],
+    "AfterTool": [
+      {
+        "matcher": "write_file|replace",
+        "hooks": [
+          {
+            "name": "audit-log",
+            "type": "command",
+            "command": "bash .gemini/hooks/post-tool.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

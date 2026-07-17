@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": "bash .github/hooks/protect-files.sh",
+        "matcher": "create|edit",
+        "timeoutSec": 10
+      }
+    ],
+    "postToolUse": [
+      {
+        "type": "command",
+        "bash": "bash .github/hooks/audit-tool.sh",
+        "matcher": "create|edit",
+        "timeoutSec": 10
+      }
+    ]
+  }
+}
