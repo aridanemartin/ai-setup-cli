@@ -26,7 +26,9 @@ async function main(): Promise<void> {
   }
 
   const selected = await p.multiselect<{ value: string; label: string; hint: string }, string>({
-    message: 'Which AI tools do you want to set up?',
+    message:
+      'Which AI tools do you want to set up?\n' +
+      '  (select one or more with Space, then press Enter to continue)',
     options: TOOLS.map(t => ({ value: t.id, label: t.label, hint: t.hint })),
   })
 
