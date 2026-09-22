@@ -153,18 +153,13 @@ async function runFromSource(source: ResolvedSource, targetDir: string): Promise
     .filter((t) => available.some((a) => a.id === t.id))
     .map((t) => t.id)
 
-  if (detectedIds.length === 0 && !all) {
-    const markers = TOOLS.map((t) => t.markers[0]).join(', ')
-    p.log.warn(`This repository doesn't have any ${markers}, etc. — nothing to detect.`)
-    p.log.info('Re-run with --all to install every provider available in the source.')
-    return false
-  }
+  // Same picker as the built-in flow; detected providers are pre-selected when found.
+  const message = detectedIds.length
+    ? 'Detected providers are pre-selected. Choose what to install:'
+    : 'Which AI tools do you want to set up?\n' +
+      '  (select one or more with Space, then press Enter to continue)'
 
-  const ids = await selectTools(
-    available,
-    detectedIds,
-    'Detected providers are pre-selected. Choose what to install:'
-  )
+  const ids = await selectTools(available, detectedIds, message)
 
   const { written, skipped } = await installTools(targetDir, ids, (tool) =>
     layout === 'providers'
@@ -172,7 +167,7 @@ async function runFromSource(source: ResolvedSource, targetDir: string): Promise
       : { srcDir: source.dir, include: tool.rootPaths }
   )
   printSummary(written, skipped)
-  return true
+  return ids.length > 0
 }
 
 async function main(): Promise<void> {

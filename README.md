@@ -156,8 +156,9 @@ supported:
   paths; shared files such as `AGENTS.md` are written once.
 - **`providers/<id>/`** — one folder per provider, matching the built-in template ids.
 
-If the project has none of the markers, the CLI reports it and installs nothing unless you pass
-`--all`.
+Detected providers are pre-selected. When the project has none of the markers, the CLI shows
+the same picker as the no-argument flow, scoped to the providers the source offers — so you can
+still install from a repo a project doesn't know about yet.
 
 | Flag | Effect |
 |------|--------|
