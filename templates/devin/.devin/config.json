@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Exec(git)",
+      "Exec(npm run)"
+    ],
+    "deny": [
+      "Exec(sudo)"
+    ],
+    "ask": [
+      "Write(package-lock.json)",
+      "Write(**/.env*)"
+    ]
+  },
+  "read_config_from": {
+    "agents_standard": true,
+    "cursor": true,
+    "windsurf": true,
+    "claude": true,
+    "copilot": true,
+    "opencode": true,
+    "zed": true
+  }
+}

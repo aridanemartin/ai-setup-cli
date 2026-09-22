@@ -6,13 +6,13 @@ This directory contains starter instruction files for every AI coding tool this 
 
 Each subdirectory maps to one provider:
 
-- `claude-code/` — CLAUDE.md + `.claude/rules/`, agents, skills, commands, hooks
+- `claude-code/` — AGENTS.md + `.claude/rules/`, agents, skills, commands, hooks
 - `codex/` — AGENTS.md + `.codex/` config
 - `cursor/` — AGENTS.md + `.cursor/rules/`, agents, prompts
+- `devin/` — AGENTS.md + `.devin/rules/`, agents, skills, hooks
 - `gemini-cli/` — GEMINI.md + `.gemini/` config
 - `github-copilot/` — `.github/copilot-instructions.md` + `.github/instructions/`
 - `opencode/` — AGENTS.md + `opencode.json`
-- `windsurf/` — AGENTS.md + `.windsurf/rules/`, workflows
 
 ## Reference implementation
 
@@ -20,7 +20,7 @@ Each subdirectory maps to one provider:
 originate there. Every other provider's template is an adaptation of the same content to that
 tool's file format, frontmatter conventions, and directory layout.
 
-When updating an example or adding a new section, start with `claude-code/CLAUDE.md`, then
+When updating an example or adding a new section, start with `claude-code/AGENTS.md`, then
 propagate the change to the other providers.
 
 ## Didactic conventions

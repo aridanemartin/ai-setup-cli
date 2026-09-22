@@ -1,0 +1,26 @@
+{
+  "PreToolUse": [
+    {
+      "matcher": "^(edit|write|apply_patch)$",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash .devin/scripts/protect-files.sh",
+          "timeout": 5
+        }
+      ]
+    }
+  ],
+  "PostToolUse": [
+    {
+      "matcher": "^(edit|write|apply_patch)$",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash .devin/scripts/audit-write.sh",
+          "timeout": 5
+        }
+      ]
+    }
+  ]
+}

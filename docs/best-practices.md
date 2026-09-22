@@ -10,7 +10,7 @@ These principles apply regardless of which AI coding tool you use.
 
 ### 1. Write a Lean Instruction File
 
-Every AI coding tool supports a project-level instruction file (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, or `.github/copilot-instructions.md`). This is the single most impactful thing you can do. Keep it short — only include things the tool cannot infer from reading your code.
+Every AI coding tool supports a project-level instruction file (`AGENTS.md`, `GEMINI.md`, or `.github/copilot-instructions.md`). This is the single most impactful thing you can do. Keep it short — only include things the tool cannot infer from reading your code.
 
 **Include:**
 - Build/test/lint commands the tool can't guess
@@ -108,13 +108,13 @@ Model Context Protocol (MCP) servers let AI tools interact with external service
 
 ### Claude Code
 
-**Instruction file:** `CLAUDE.md`
+**Instruction file:** `AGENTS.md`
 
 Claude Code is an agentic coding environment that can read files, run commands, and make changes autonomously.
 
 | Feature | Location | Purpose |
 |---------|----------|---------|
-| Instructions | `CLAUDE.md` | Project context, loaded every session |
+| Instructions | `AGENTS.md` | Project context, loaded every session |
 | Rules | `.claude/rules/*.md` | File-scoped conventions |
 | Hooks | `.claude/hooks/*.sh` + `.claude/settings.json` | Deterministic pre/post tool scripts |
 | Sub-agents | `.claude/agents/*.md` | Delegated tasks in separate context |
@@ -126,7 +126,7 @@ Claude Code is an agentic coding environment that can read files, run commands, 
 
 **Key practices:**
 
-- Run `/init` to generate a starter `CLAUDE.md` from your project structure, then refine
+- Run `/init` to generate a starter `AGENTS.md` from your project structure, then refine
 - Use **plan mode** (`/plan`) to scope work before implementation
 - Give Claude a verification check (test suite, build, screenshot comparison) to close the feedback loop
 - Use **sub-agents** for codebase investigation so file reads don't fill the main context
@@ -273,27 +273,27 @@ OpenCode is an open-source AI coding agent available as a terminal, desktop, or 
 
 **Instruction file:** `AGENTS.md`
 
-Devin (formerly Windsurf, by Codeium) is an AI IDE with agentic flows and context-aware features.
+Devin (formerly Windsurf, by Cognition) is an AI coding agent available as a desktop IDE and a CLI (`devin`). `.devin/` is the Devin-native config directory and takes precedence over the legacy `.windsurf/`.
 
 | Feature | Location | Purpose |
 |---------|----------|---------|
-| Instructions | `AGENTS.md` | Project-level instructions |
-| Rules | `.devin/rules/*.md` | File-scoped conventions |
-| Hooks | `.windsurf/hooks.json` + `.windsurf/scripts/*.sh` | Pre/post tool scripts |
-| Agents | `.windsurf/agents/*.md` | Delegated tasks |
-| Workflows | `.windsurf/workflows/*.md` | Step-by-step workflows |
-| Skills | `.windsurf/skills/*/SKILL.md` | Reusable workflows |
-| Ignore | `.codeiumignore` | Files excluded from context |
+| Instructions | `AGENTS.md` | Project-level always-on rules |
+| Rules | `.devin/rules/*.md` | File-scoped conventions (one rule per file) |
+| Hooks | `.devin/hooks.v1.json` | Pre/post tool lifecycle scripts |
+| Agents | `.devin/agents/*.md` | Custom subagent profiles |
+| Skills | `.devin/skills/*/SKILL.md` | Reusable procedures, invoked with `/name` |
+| Config | `.devin/config.json` | Permissions and cross-tool config imports |
+| MCP | `.devin/mcp_config.json` | External tool connections |
+| Ignore | `.gitignore` | Devin CLI respects it (not `.codeiumignore`) |
 
 **Key practices:**
 
-- AGENTS.md at the repo root is an **always-on rule**. Files in subdirectories are scoped to that directory automatically
-- Use `.devin/rules/` for file-scoped rules — they support glob patterns and manual/auto activation
-- Rules are limited to 12,000 characters each; split long rules into multiple files
-- Devin discovers rules automatically from workspace directories and sub-directories
-- Use **Workflows** in `.windsurf/workflows/` for multi-step procedures (commit, review, deploy)
-- Unlike AGENTS.md (always-on), Rules in `.devin/rules/` support manual activation and glob patterns for precise scoping
-- The `.codeiumignore` file controls which files Devin excludes from its context
+- `AGENTS.md` at the repo root is an **always-on rule**. Files in subdirectories are scoped to that directory automatically
+- Prefer **skills** over rules for multi-step procedures — skills load only when relevant, keeping context lean
+- Use `.devin/rules/` for file-scoped rules; they support `trigger: always_on` / `glob` / `model_decision` / `manual`
+- Keep rules short — the recommended pattern is a rule that tells the agent which skill to use in a given scenario
+- Put project MCP servers in `.devin/mcp_config.json`; keep secrets in `.devin/config.local.json` (gitignored)
+- Migrating from Windsurf: run `devin migrate hooks` and `devin migrate workflows`
 
 ---
 
@@ -301,14 +301,14 @@ Devin (formerly Windsurf, by Codeium) is an AI IDE with agentic flows and contex
 
 | Capability | Claude Code | Codex CLI | Cursor | Gemini CLI | GitHub Copilot | OpenCode | Devin |
 |-----------|-------------|-----------|--------|------------|----------------|----------|-------|
-| Instruction file | `CLAUDE.md` | `AGENTS.md` | `AGENTS.md` | `GEMINI.md` | `copilot-instructions.md` | `AGENTS.md` | `AGENTS.md` |
+| Instruction file | `AGENTS.md` | `AGENTS.md` | `AGENTS.md` | `GEMINI.md` | `copilot-instructions.md` | `AGENTS.md` | `AGENTS.md` |
 | File-scoped rules | `.claude/rules/` | `.codex/rules/` | `.cursor/rules/` | via context config | `.github/instructions/` | via config | `.devin/rules/` |
-| Sub-agents | `.claude/agents/` | `.codex/agents/` | `.cursor/agents/` | Inline in context | `.github/agents/` | `opencode.json` | `.windsurf/agents/` |
-| Skills | `.claude/skills/` | `.codex/skills/` | `.cursor/skills/` | `.gemini/skills/` | `.github/skills/` | `.opencode/skills/` | `.windsurf/skills/` |
+| Sub-agents | `.claude/agents/` | `.codex/agents/` | `.cursor/agents/` | Inline in context | `.github/agents/` | `opencode.json` | `.devin/agents/` |
+| Skills | `.claude/skills/` | `.codex/skills/` | `.cursor/skills/` | `.gemini/skills/` | `.github/skills/` | `.opencode/skills/` | `.devin/skills/` |
 | Hooks | Yes | Yes | Yes | Yes | No | No | Yes |
 | MCP support | Yes | No | Yes | Yes | No | Yes | No |
-| Custom commands | `.claude/commands/` | `.codex/commands/` | No | `.gemini/commands/` | `.github/prompts/` | Custom | `.windsurf/workflows/` |
-| Ignore file | `.claudeignore` | `.codexignore` | `.cursorignore` | `.geminiignore` | `.githubignore` | Via config | `.codeiumignore` |
+| Custom commands | `.claude/commands/` | `.codex/commands/` | No | `.gemini/commands/` | `.github/prompts/` | Custom | `.devin/skills/` |
+| Ignore file | `.claudeignore` | `.codexignore` | `.cursorignore` | `.geminiignore` | `.githubignore` | Via config | `.gitignore` |
 
 ---
 

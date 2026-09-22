@@ -18,7 +18,7 @@ If you run this with an older Node.js version (for example 20.10.0), the CLI may
 
 | Tool | Instruction file |
 |------|-----------------|
-| [Claude Code](https://claude.ai/code) | `CLAUDE.md` |
+| [Claude Code](https://claude.ai/code) | `AGENTS.md` |
 | [Codex CLI](https://github.com/openai/codex) | `AGENTS.md` |
 | [Cursor](https://cursor.com) | `AGENTS.md` |
 | [Gemini CLI](https://github.com/google-gemini/gemini-cli) | `GEMINI.md` |
@@ -30,18 +30,19 @@ If you run this with an older Node.js version (for example 20.10.0), the CLI may
 
 ### Claude Code
 
+Claude Code reads `AGENTS.md` directly, and the same file also serves Devin, Codex, Cursor, and
+OpenCode — there is no separate Claude-only instruction file.
+
 | File | Purpose |
 |------|---------|
-| `CLAUDE.md` | Project instructions: commands, code style, workflow, banned patterns |
+| `AGENTS.md` | Project instructions: commands, code style, workflow, banned patterns |
 | `.claude/settings.json` | Permissions and hook config |
-| `.claude/rules/code-style.md` | Import conventions, formatting, naming |
 | `.claude/rules/testing.md` | Test runner preferences, file colocation |
-| `.claude/rules/security.md` | No hardcoded secrets, input validation |
 | `.claude/hooks/protect-files.sh` | Prevents editing `.env`, `package-lock.json` |
 | `.claude/agents/code-reviewer.md` | Code reviewer subagent |
-| `.claude/commands/review.md` | `/review` slash command |
-| `.claude/commands/document.md` | `/document` slash command |
-| `.claude/skills/write-commit/SKILL.md` | `write-commit` skill |
+| `.claude/agents/accessibility-reviewer.md` | WCAG 2.2 AA audit subagent |
+| `.claude/commands/create-pr.md` | `/create-pr` slash command |
+| `.claude/skills/web-design-guidelines/SKILL.md` | UI review skill |
 | `.mcp.json` | Project-scoped MCP server definitions |
 
 ### Cursor
@@ -122,25 +123,48 @@ If you run this with an older Node.js version (for example 20.10.0), the CLI may
 
 | File | Purpose |
 |------|---------|
-| `AGENTS.md` | Project instructions |
-| `.devin/rules/general.md` | General rules applied to all files |
-| `.devin/rules/components.md` | Component conventions |
-| `.devin/rules/testing.md` | Test conventions |
-| `.windsurf/hooks.json` | Hook definitions |
-| `.windsurf/scripts/protect-files.sh` | Prevents editing protected files |
-| `.windsurf/agents/code-reviewer.md` | Code reviewer agent |
-| `.windsurf/workflows/commit.md` | Commit workflow |
-| `.windsurf/workflows/review.md` | Review workflow |
-| `.windsurf/skills/write-commit/SKILL.md` | `write-commit` skill |
-| `.codeiumignore` | Files excluded from Devin's context |
+| `AGENTS.md` | Always-on project rules (shared with other tools) |
+| `.devin/config.json` | Permissions + which other tools' config to import |
+| `.devin/rules/testing.md` | Rule loaded only for test files |
+| `.devin/hooks.v1.json` | Devin hooks: protect files + audit writes |
+| `.devin/scripts/protect-files.sh` | Blocks edits to `.env`, `package-lock.json` |
+| `.devin/scripts/audit-write.sh` | Appends edited paths to `.devin/write.log` |
+| `.devin/agents/code-reviewer.md` | Read-only code review subagent |
+| `.devin/agents/accessibility-reviewer.md` | Read-only WCAG 2.2 AA audit subagent |
+| `.devin/skills/create-pr/SKILL.md` | `/create-pr` skill |
+| `.devin/skills/web-design-guidelines/SKILL.md` | UI review skill |
 
-## CLI flags
+> Devin CLI does **not** read `.codeiumignore` when run standalone — it respects `.gitignore`.
+> `.devin/` is the Devin-native location and takes precedence over the legacy `.windsurf/`.
+
+## Custom sources
+
+Point the CLI at your own repository (or any local directory) instead of the built-in
+templates. It detects which providers the current project already uses from marker paths
+(`.claude`, `.github`, `.cursor`, `.codex`, `.gemini`, `.opencode`/`opencode.json`, `.devin`),
+pre-selects them, and installs only those.
+
+```bash
+npx ai-setup-cli https://github.com/aridanemartin/aridane-martin-ai-setup
+```
+
+A source can be a GitHub URL, an `owner/repo` shorthand, or a local path. Two layouts are
+supported:
+
+- **Root layout** — real project paths at the repository root (`.claude/`, `.github/`,
+  `AGENTS.md`, `GEMINI.md`, `opencode.json`, …). Each selected provider installs only its own
+  paths; shared files such as `AGENTS.md` are written once.
+- **`providers/<id>/`** — one folder per provider, matching the built-in template ids.
+
+If the project has none of the markers, the CLI reports it and installs nothing unless you pass
+`--all`.
 
 | Flag | Effect |
 |------|--------|
 | _(none)_ | Interactive: tool selection + per-file overwrite prompts |
 | `--dry-run` | Shows what would be written without touching the filesystem |
 | `--yes` | Skips overwrite prompts and always overwrites existing files |
+| `--all` | With a source: install every provider available in it, skipping selection |
 
 ## Contributing
 

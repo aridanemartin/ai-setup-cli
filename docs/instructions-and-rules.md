@@ -6,10 +6,10 @@ How each AI coding tool handles **instruction files** (project-level context) an
 
 ## 1. Claude Code
 
-**Instruction file:** `CLAUDE.md`  
+**Instruction file:** `AGENTS.md`  
 **Rule files:** `.claude/rules/*.md`
 
-`CLAUDE.md` is loaded at the start of every conversation. Keep it under ~50 lines, only including things Claude can't infer from reading your code. Run `/init` to generate a starter.
+`AGENTS.md` is loaded at the start of every conversation. Keep it under ~50 lines and include only what Claude can't infer from your code. Run `/init` to generate a starter.
 
 ```
 # Project
@@ -39,10 +39,10 @@ How each AI coding tool handles **instruction files** (project-level context) an
 
 Rules in `.claude/rules/*.md` come in two forms:
 
-- **Unconditional** (no `paths` frontmatter) — loaded at launch alongside `CLAUDE.md`, applies to all files
+- **Unconditional** (no `paths` frontmatter) — loaded at launch alongside the instruction file, applies to all files
 - **Path-scoped** (with `paths` frontmatter) — loaded only when Claude works with files matching the specified glob patterns
 
-The `CLAUDE.md` at the project root is always loaded; sub-directory `CLAUDE.md` files are loaded when Claude reads files in those directories. Home `~/.claude/CLAUDE.md` applies across all projects.
+The root `AGENTS.md` is always loaded; instruction files in subdirectories load when Claude reads files there. User-level instructions apply across all projects.
 
 Example path-scoped rule (`.claude/rules/api.md`):
 
@@ -362,7 +362,7 @@ Each agent can have its own system prompt in `prompts/<agent-name>.txt`.
 **Instruction file:** `AGENTS.md`  
 **Rule files:** `.devin/rules/*.md`
 
-`AGENTS.md` at the repo root is an **always-on rule**. Files in subdirectories are scoped to that directory automatically.
+Devin (formerly Windsurf, by Cognition) uses `AGENTS.md` at the repo root as an **always-on rule**. Devin reads the same standard names other tools use — `AGENTS.md`, `AGENT.md`, `.windsurfrules` — and `AGENTS.md` in subdirectories is scoped to that directory automatically. `.devin/` is the Devin-native location and takes precedence over the legacy `.windsurf/`.
 
 ```
 <!-- Devin reads AGENTS.md from the repo root as an always-on rule. -->
@@ -406,14 +406,22 @@ alwaysApply: false
 
 Rules support four activation modes: `always` (always loaded), `glob` (matches files by glob), `model` (model decides), `manual` (user invokes).
 
-Hooks (`.windsurf/hooks.json`):
+Hooks (`.devin/hooks.v1.json`) — the file *is* the hooks object, keyed by lifecycle event:
 
 ```json
 {
-  "hooks": {
-    "pre_read_code": [{ "command": "python3 /path/to/script.py" }],
-    "post_write_code": [{ "command": "python3 /path/to/another/script.py" }]
-  }
+  "PreToolUse": [
+    {
+      "matcher": "^(edit|write|apply_patch)$",
+      "hooks": [{ "type": "command", "command": "bash .devin/scripts/protect-files.sh" }]
+    }
+  ],
+  "PostToolUse": [
+    {
+      "matcher": "",
+      "hooks": [{ "type": "command", "command": "bash .devin/scripts/audit-write.sh" }]
+    }
+  ]
 }
 ```
 
@@ -423,7 +431,7 @@ Hooks (`.windsurf/hooks.json`):
 
 | Need | Tool |
 |-----|------|
-| Always-on project conventions | `CLAUDE.md` / `AGENTS.md` / `GEMINI.md` / `copilot-instructions.md` |
+| Always-on project conventions | `AGENTS.md` (Claude Code, Devin, Codex, Cursor, OpenCode) / `GEMINI.md` / `copilot-instructions.md` |
 | File-type-specific rules | `.mdc`, `.toml`, `.md` files in tool-specific rules directories |
 | Deterministic pre/post execution | Hooks |
 | Reusable workflows | Skills |

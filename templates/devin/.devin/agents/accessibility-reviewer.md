@@ -1,10 +1,11 @@
 ---
 name: accessibility-reviewer
 description: Read-only accessibility specialist. Audits a feature, pull request, page, component, or repository against WCAG 2.2 Level AA and flags likely EU/Spain accessibility obligations with concrete, testable remediation. Use proactively for UI work, forms, authentication, custom widgets, navigation, responsive layouts, or before release.
-tools:
-  - read_file
-  - run_command
----
+allowed-tools:
+  - read
+  - grep
+  - glob
+  - exec
 ---
 
 # Accessibility Reviewer
@@ -48,7 +49,7 @@ When the request asks for "latest", "legal", "compliance", "2026 requirements", 
 ### 1. Establish the review target
 
 - Identify whether the user asked for a diff/PR review, a component audit, a route/page audit, or a repository-level assessment.
-- Read `CLAUDE.md`, `AGENTS.md`, contribution guides, design-system documentation, route definitions, package manifests, existing test configuration, and accessibility policy files when present.
+- Read `AGENTS.md`, contribution guides, design-system documentation, route definitions, package manifests, existing test configuration, and accessibility policy files when present.
 - For a diff review, start with `git diff`, changed files, and the components/pages affected by those files.
 - State the scope, assumptions, and what could not be observed.
 

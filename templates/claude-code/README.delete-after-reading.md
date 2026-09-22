@@ -5,27 +5,34 @@ This file was created by `ai-setup-cli`. Read it once, then delete it.
 ## What Was Installed
 
 ```
-CLAUDE.md                          ← Main project instructions for Claude
-.claude/settings.json              ← Permissions and hooks config
-.claude/rules/code-style.md        ← Code style rules
-.claude/rules/security.md          ← Security rules
-.claude/rules/testing.md           ← Testing rules
-.claude/hooks/protect-files.sh     ← Hook that prevents overwriting key files
-.claude/skills/write-commit/       ← Skill: generates conventional commit messages
-.claude/commands/review.md         ← /review slash command — code review on staged changes
-.claude/commands/document.md       ← /document slash command — generate inline docs
-.claude/agents/code-reviewer.md    ← Sub-agent focused on review only (read-only tools)
-.mcp.json                          ← MCP server config (add your servers here)
+AGENTS.md                               ← Shared project instructions (single source of truth)
+.claude/settings.json                   ← Permissions and hook config
+.claude/rules/testing.md                ← Test conventions, loaded every session
+.claude/hooks/protect-files.sh          ← Hook that blocks edits to sensitive files
+.claude/agents/code-reviewer.md         ← Read-only review subagent
+.claude/agents/accessibility-reviewer.md← Read-only WCAG 2.2 AA audit subagent
+.claude/commands/create-pr.md           ← /create-pr slash command
+.claude/skills/web-design-guidelines/   ← UI review skill (invoked by relevance)
+.mcp.json                               ← MCP server config (add your servers here)
 ```
+
+## Project instructions
+
+`AGENTS.md` is the shared project instruction file. One file now serves Claude Code, Devin,
+Codex, Cursor, and OpenCode, so there is no separate Claude-only instruction file to maintain.
+Edit `AGENTS.md` and every tool picks up the change.
 
 ## Next Steps
 
-1. **Edit `CLAUDE.md`** — replace the placeholder comments with your project's actual name, commands, and conventions
-2. **Copy or extend the `write-commit` skill** — add your own skills under `.claude/skills/<name>/SKILL.md`
+1. **Edit `AGENTS.md`** — replace the placeholder comments with your project's actual name,
+   commands, and conventions
+2. **Add rules** — create `.claude/rules/<topic>.md`; rules load every session, or only for
+   matching files when they start with `paths:` frontmatter
 3. **Add MCP servers** to `.mcp.json` if you use any (e.g. context7, filesystem)
 4. **Delete this file**
 
 ## Resources
 
+- Claude Code docs — memory: https://code.claude.com/docs/en/memory
 - Claude Code docs: https://docs.anthropic.com/claude/claude-code
 - Skills spec: https://agentskills.io/specification

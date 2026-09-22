@@ -1,3 +1,9 @@
+<!--
+  AGENTS.md is the shared, tool-agnostic project instruction file.
+  Claude Code, Devin, Codex, Cursor and OpenCode read it as project instructions,
+  so keep this as the single source of truth for your project.
+-->
+
 # Project
 
 <!-- TIP 1 — Project Overview: Write an elevator pitch. The AI can't write good code for an
