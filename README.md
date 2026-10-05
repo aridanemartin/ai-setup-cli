@@ -1,47 +1,32 @@
 # ai-setup-cli
 
-> One command to configure any AI coding tool in your project.
+> 💻 One command to configure any AI coding tool in your project!
 
 ## Requirements
 
 Node.js >= 20.12.0
 
-## Set up a project with the built-in templates
+## OPTION 1: Set up a project with a template
 
 ```bash
 npx ai-setup-cli
 ```
 
-Pick one or more tools — Claude Code, Cursor, Codex CLI, Gemini CLI, GitHub Copilot, OpenCode,
-or Devin — and get ready-to-use instructions, rules, hooks, and skills for each. Edit them to
-match your project.
+- Select if you want to install into the current project or globally for all projects on your machine.
+- Pick providers to install, or install all of them at once.
+- Voila! You have an ready-to-use AI setup template to play with!
 
-## Install your own team setup instead
+## OPTION 2: Copy an AI setup from a public GitHub repo
 
-```bash
-npx ai-setup-cli https://github.com/you/your-ai-setup
-```
-
-Point at any GitHub repo, `owner/repo` shorthand, or local path with its own provider config
-(`.claude/`, `.github/`, `AGENTS.md`, …) instead of the built-in templates. The CLI lists every
-tool it knows; only the ones your source actually provides are selectable.
-
-## Install globally instead of per-project
+‼️ Works with any public GitHub repo with .github, .claude, .codex, .gemini, .opencode, or .cursor directories in the root.
 
 ```bash
-npx ai-setup-cli https://github.com/you/your-ai-setup --global
+npx ai-setup-cli https://github.com/aridanemartin/aridane-martin-public-ai-setup
 ```
 
-Writes into each tool's user-level config directory (`~/.claude`, `~/.codex`,
-`~/.config/opencode`, …) instead of the current project, so the setup applies to every project
-on your machine. Files that only make sense per-project are skipped automatically. Exact
-local → global mappings: [`docs/AI-PROVIDERS-FOLDER-STRUCTURE.md`](docs/AI-PROVIDERS-FOLDER-STRUCTURE.md).
-
-## Preview before writing anything
-
-```bash
-npx ai-setup-cli --dry-run
-```
+- Select if you want to install into the current project or globally for all projects on your machine.
+- Pick providers to install, or install all of them at once.
+- Voila! Your project is now ready to use with your AI coding tools.
 
 ## Flags
 
