@@ -204,9 +204,10 @@ async function runFromSource(source: ResolvedSource, targetDir: string): Promise
   // Nothing is pre-selected, so the user explicitly chooses what to install.
   const ids = await selectTools(
     choices,
-    scope === 'global'
+    (scope === 'global'
       ? 'Choose which providers to install globally:'
-      : 'Choose which providers to install:'
+      : 'Choose which providers to install:') +
+      '\n  (select one or more with Space, then press Enter to continue)'
   )
 
   const { written, skipped } = await installTools(ids, (tool) => {
