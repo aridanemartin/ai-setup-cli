@@ -107,17 +107,29 @@ export function sourceLayout(sourceDir: string): 'providers' | 'root' {
   return fs.existsSync(path.join(sourceDir, 'providers')) ? 'providers' : 'root'
 }
 
+export interface ToolChoice {
+  id: string
+  label: string
+  hint: string
+  /** Whether the source repository actually supplies this provider. */
+  available: boolean
+}
+
 /**
- * Providers to pre-select when installing from a source repository.
+ * Every provider, in `TOOLS` order, flagged with whether the source offers it.
  *
- * The repository being fetched is the source of truth: every provider it offers
- * is pre-selected. Detection is intentionally based on the source itself rather
- * than on markers in the current working directory — pointing at a curated setup
- * repo should offer that whole setup, not just the providers whose markers happen
- * to exist where the command was run (for example `.github` in any GitHub repo).
+ * Nothing is pre-selected: the source decides what is *selectable*, and the user
+ * decides what to install. Providers the source does not offer are shown as
+ * unavailable instead of being hidden.
  */
-export function preselectedTools(sourceDir: string): Tool[] {
-  return availableTools(sourceDir)
+export function toolChoices(sourceDir: string): ToolChoice[] {
+  const available = new Set(availableTools(sourceDir).map((t) => t.id))
+  return TOOLS.map((tool) => ({
+    id: tool.id,
+    label: tool.label,
+    hint: tool.hint,
+    available: available.has(tool.id),
+  }))
 }
 
 /**

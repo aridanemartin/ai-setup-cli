@@ -140,9 +140,9 @@ OpenCode — there is no separate Claude-only instruction file.
 ## Custom sources
 
 Point the CLI at your own repository (or any local directory) instead of the built-in
-templates. It scans the repository you pass and pre-selects every provider it offers, so a
-curated setup repo that contains all providers marks all of them — regardless of what the
-current directory happens to have.
+templates. It scans the repository you pass and lists every provider it knows: the ones the
+repository offers are selectable, the rest are shown greyed out as `(Not found)`. Nothing is
+pre-selected — you choose what to install.
 
 ```bash
 npx ai-setup-cli https://github.com/aridanemartin/aridane-martin-ai-setup
@@ -156,16 +156,23 @@ supported:
   paths; shared files such as `AGENTS.md` are written once.
 - **`providers/<id>/`** — one folder per provider, matching the built-in template ids.
 
-Every provider found in the source is pre-selected; deselect any you don't want before
-confirming. Pre-selection is based on the fetched repository, not on markers in the current
-directory, so pointing at a repo that contains all providers offers that whole setup.
+When you install from a source you are first asked where to put the files:
+
+- **Local** — into the current project, at the paths shown above.
+- **Global** — into each provider's user-level config directory (`~/.claude`, `~/.copilot`,
+  `~/.config/opencode`, `~/.gemini`, `~/.codex`, `~/.cursor`, `~/.config/devin`). Files that
+  only make sense per project are omitted, and a few are renamed (for example Claude's
+  `AGENTS.md` becomes `~/.claude/CLAUDE.md`). See
+  [`docs/AI-PROVIDERS-FOLDER-STRUCTURE.md`](docs/AI-PROVIDERS-FOLDER-STRUCTURE.md) for the full
+  local → global mapping.
 
 | Flag | Effect |
 |------|--------|
-| _(none)_ | Interactive: tool selection + per-file overwrite prompts |
+| _(none)_ | Interactive: local/global, tool selection + per-file overwrite prompts |
 | `--dry-run` | Shows what would be written without touching the filesystem |
 | `--yes` | Skips overwrite prompts and always overwrites existing files |
 | `--all` | With a source: install every provider available in it, skipping selection |
+| `--global` | With a source: install into user-level config dirs without asking |
 
 ## Contributing
 

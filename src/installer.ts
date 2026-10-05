@@ -10,10 +10,17 @@ export interface InstallOptions {
    */
   include?: string[]
   /**
-   * Relative paths already written earlier in the same run. Skipped silently so a file
-   * shared by several providers (e.g. `AGENTS.md`) is only offered/installed once.
+   * Absolute destination paths already written earlier in the same run. Skipped silently
+   * so a file shared by several providers (e.g. `AGENTS.md` in a project root) is only
+   * offered/installed once. `installTool` reads and updates this set itself.
    */
   handled?: Set<string>
+  /**
+   * Rewrites a source-relative path to its destination-relative path. Return `null`
+   * to omit the file entirely (e.g. project-only files when installing globally).
+   * Defaults to copying paths unchanged.
+   */
+  mapPath?: (relativePath: string) => string | null
 }
 
 export interface InstallResult {
@@ -32,26 +39,32 @@ export async function installTool(
 
   for (const srcFile of files) {
     const relativePath = path.relative(srcDir, srcFile)
+    const destRelative = options.mapPath ? options.mapPath(relativePath) : relativePath
 
-    if (options.handled?.has(relativePath)) continue
+    // No global/local destination for this file — omit it silently.
+    if (destRelative === null) continue
+
+    const destFile = path.join(destDir, destRelative)
+    if (options.handled?.has(destFile)) continue
 
     if (options.dryRun) {
-      written.push(relativePath)
+      options.handled?.add(destFile)
+      written.push(destRelative)
       continue
     }
 
-    if (await fs.pathExists(path.join(destDir, relativePath))) {
-      const overwrite = await options.onConflict(relativePath)
+    if (await fs.pathExists(destFile)) {
+      const overwrite = await options.onConflict(destRelative)
       if (!overwrite) {
-        skipped.push(relativePath)
+        skipped.push(destRelative)
         continue
       }
     }
 
-    const destFile = path.join(destDir, relativePath)
     await fs.ensureDir(path.dirname(destFile))
     await fs.copy(srcFile, destFile)
-    written.push(relativePath)
+    options.handled?.add(destFile)
+    written.push(destRelative)
   }
 
   return { written, skipped }

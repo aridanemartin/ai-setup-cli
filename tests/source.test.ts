@@ -1,11 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { installTool } from '../src/installer'
-import {
-  availableTools,
-  detectedTools,
-  preselectedTools,
-  sourceLayout,
-} from '../src/tools'
+import { availableTools, detectedTools, sourceLayout, toolChoices } from '../src/tools'
 import { parseGitHubSource, resolveSource } from '../src/source'
 import fs from 'fs-extra'
 import os from 'os'
@@ -106,21 +101,13 @@ describe('provider detection', () => {
     expect(availableTools(tmpDir).map((t) => t.id)).toEqual(['claude-code', 'devin'])
   })
 
-  it('pre-selects every provider offered by a full root-layout source', async () => {
+  it('flags every provider, marking the ones a root-layout source does not offer', async () => {
     await fs.ensureDir(path.join(tmpDir, '.claude'))
     await fs.ensureDir(path.join(tmpDir, '.github'))
-    await fs.ensureDir(path.join(tmpDir, '.opencode'))
-    await fs.ensureDir(path.join(tmpDir, '.gemini'))
-    await fs.ensureDir(path.join(tmpDir, '.codex'))
-    await fs.ensureDir(path.join(tmpDir, '.cursor'))
-    await fs.ensureDir(path.join(tmpDir, '.devin'))
-    await fs.writeFile(path.join(tmpDir, 'opencode.json'), '{}')
-    await fs.writeFile(path.join(tmpDir, 'GEMINI.md'), '# gemini')
-    await fs.writeFile(path.join(tmpDir, '.mcp.json'), '{}')
     await fs.writeFile(path.join(tmpDir, 'AGENTS.md'), '# hi')
 
-    // The fetched repo is the source of truth, regardless of the cwd.
-    expect(preselectedTools(tmpDir).map((t) => t.id)).toEqual([
+    const choices = toolChoices(tmpDir)
+    expect(choices.map((c) => c.id)).toEqual([
       'claude-code',
       'github-copilot',
       'opencode',
@@ -129,13 +116,20 @@ describe('provider detection', () => {
       'cursor',
       'devin',
     ])
+    expect(choices.filter((c) => c.available).map((c) => c.id)).toEqual([
+      'claude-code',
+      'github-copilot',
+    ])
+    // Options the source cannot supply are reported as unavailable, not hidden.
+    expect(choices.find((c) => c.id === 'cursor')?.available).toBe(false)
   })
 
-  it('pre-selects every provider in a providers/<id> source', async () => {
+  it('flags every provider a providers/<id> source offers', async () => {
     await fs.ensureDir(path.join(tmpDir, 'providers', 'claude-code'))
     await fs.ensureDir(path.join(tmpDir, 'providers', 'cursor'))
 
-    expect(preselectedTools(tmpDir).map((t) => t.id)).toEqual(['claude-code', 'cursor'])
+    const choices = toolChoices(tmpDir)
+    expect(choices.filter((c) => c.available).map((c) => c.id)).toEqual(['claude-code', 'cursor'])
   })
 })
 
@@ -177,7 +171,7 @@ describe('installTool include + handled', () => {
     const result = await installTool(src, dest, {
       dryRun: false,
       include: ['config.md', 'sub'],
-      handled: new Set(['config.md']),
+      handled: new Set([path.join(dest, 'config.md')]),
       onConflict: async () => true,
     })
 

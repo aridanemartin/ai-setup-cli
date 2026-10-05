@@ -87,6 +87,45 @@ describe('installTool', () => {
     expect(await fs.pathExists(path.join(destDir, 'config.md'))).toBe(false)
   })
 
+  it('renames and omits files via mapPath', async () => {
+    const srcDir = path.join(tmpDir, '_templates', 'fake-tool')
+    const destDir = path.join(tmpDir, 'project')
+
+    const result = await installTool(srcDir, destDir, {
+      dryRun: false,
+      mapPath: (relativePath) =>
+        relativePath === 'config.md' ? 'renamed.md' : relativePath === 'sub/nested.md' ? null : relativePath,
+      onConflict: async () => true,
+    })
+
+    expect(result.written).toEqual(['renamed.md'])
+    expect(await fs.pathExists(path.join(destDir, 'renamed.md'))).toBe(true)
+    expect(await fs.pathExists(path.join(destDir, 'config.md'))).toBe(false)
+    expect(await fs.pathExists(path.join(destDir, 'sub', 'nested.md'))).toBe(false)
+  })
+
+  it('tracks handled files by absolute destination, not relative path', async () => {
+    const srcDir = path.join(tmpDir, '_templates', 'fake-tool')
+    const handled = new Set<string>()
+
+    const a = await installTool(srcDir, path.join(tmpDir, 'a'), {
+      dryRun: false,
+      include: ['config.md'],
+      handled,
+      onConflict: async () => true,
+    })
+    const b = await installTool(srcDir, path.join(tmpDir, 'b'), {
+      dryRun: false,
+      include: ['config.md'],
+      handled,
+      onConflict: async () => true,
+    })
+
+    // Same relative path in a different base dir is a different destination.
+    expect(a.written).toEqual(['config.md'])
+    expect(b.written).toEqual(['config.md'])
+  })
+
   it('calls onConflict only for files that already exist', async () => {
     const srcDir = path.join(tmpDir, '_templates', 'fake-tool')
     const destDir = path.join(tmpDir, 'project')
