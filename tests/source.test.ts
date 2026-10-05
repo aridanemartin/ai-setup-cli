@@ -1,6 +1,11 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { installTool } from '../src/installer'
-import { availableTools, detectedTools, sourceLayout } from '../src/tools'
+import {
+  availableTools,
+  detectedTools,
+  preselectedTools,
+  sourceLayout,
+} from '../src/tools'
 import { parseGitHubSource, resolveSource } from '../src/source'
 import fs from 'fs-extra'
 import os from 'os'
@@ -99,6 +104,38 @@ describe('provider detection', () => {
 
     expect(sourceLayout(tmpDir)).toBe('providers')
     expect(availableTools(tmpDir).map((t) => t.id)).toEqual(['claude-code', 'devin'])
+  })
+
+  it('pre-selects every provider offered by a full root-layout source', async () => {
+    await fs.ensureDir(path.join(tmpDir, '.claude'))
+    await fs.ensureDir(path.join(tmpDir, '.github'))
+    await fs.ensureDir(path.join(tmpDir, '.opencode'))
+    await fs.ensureDir(path.join(tmpDir, '.gemini'))
+    await fs.ensureDir(path.join(tmpDir, '.codex'))
+    await fs.ensureDir(path.join(tmpDir, '.cursor'))
+    await fs.ensureDir(path.join(tmpDir, '.devin'))
+    await fs.writeFile(path.join(tmpDir, 'opencode.json'), '{}')
+    await fs.writeFile(path.join(tmpDir, 'GEMINI.md'), '# gemini')
+    await fs.writeFile(path.join(tmpDir, '.mcp.json'), '{}')
+    await fs.writeFile(path.join(tmpDir, 'AGENTS.md'), '# hi')
+
+    // The fetched repo is the source of truth, regardless of the cwd.
+    expect(preselectedTools(tmpDir).map((t) => t.id)).toEqual([
+      'claude-code',
+      'github-copilot',
+      'opencode',
+      'gemini-cli',
+      'codex',
+      'cursor',
+      'devin',
+    ])
+  })
+
+  it('pre-selects every provider in a providers/<id> source', async () => {
+    await fs.ensureDir(path.join(tmpDir, 'providers', 'claude-code'))
+    await fs.ensureDir(path.join(tmpDir, 'providers', 'cursor'))
+
+    expect(preselectedTools(tmpDir).map((t) => t.id)).toEqual(['claude-code', 'cursor'])
   })
 })
 

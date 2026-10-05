@@ -108,6 +108,19 @@ export function sourceLayout(sourceDir: string): 'providers' | 'root' {
 }
 
 /**
+ * Providers to pre-select when installing from a source repository.
+ *
+ * The repository being fetched is the source of truth: every provider it offers
+ * is pre-selected. Detection is intentionally based on the source itself rather
+ * than on markers in the current working directory — pointing at a curated setup
+ * repo should offer that whole setup, not just the providers whose markers happen
+ * to exist where the command was run (for example `.github` in any GitHub repo).
+ */
+export function preselectedTools(sourceDir: string): Tool[] {
+  return availableTools(sourceDir)
+}
+
+/**
  * Files shared by many providers. Their presence alone must not make a provider
  * "available" in a root-layout source, or every AGENTS.md repo would expose every tool.
  */

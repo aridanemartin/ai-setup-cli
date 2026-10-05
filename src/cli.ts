@@ -3,7 +3,7 @@ import path from 'path'
 import {
   TOOLS,
   availableTools,
-  detectedTools,
+  preselectedTools,
   sourceLayout,
   toolById,
   toolTemplateDir,
@@ -149,15 +149,12 @@ async function runFromSource(source: ResolvedSource, targetDir: string): Promise
     return false
   }
 
-  const detectedIds = detectedTools(targetDir)
-    .filter((t) => available.some((a) => a.id === t.id))
-    .map((t) => t.id)
+  // The fetched repository is the source of truth for pre-selection: mark every
+  // provider it offers. Using the current directory's markers here would only
+  // pre-select the providers that happen to exist where the command was run.
+  const detectedIds = preselectedTools(source.dir).map((t) => t.id)
 
-  // Same picker as the built-in flow; detected providers are pre-selected when found.
-  const message = detectedIds.length
-    ? 'Detected providers are pre-selected. Choose what to install:'
-    : 'Which AI tools do you want to set up?\n' +
-      '  (select one or more with Space, then press Enter to continue)'
+  const message = 'Providers from the source are pre-selected. Choose what to install:'
 
   const ids = await selectTools(available, detectedIds, message)
 

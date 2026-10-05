@@ -140,9 +140,9 @@ OpenCode — there is no separate Claude-only instruction file.
 ## Custom sources
 
 Point the CLI at your own repository (or any local directory) instead of the built-in
-templates. It detects which providers the current project already uses from marker paths
-(`.claude`, `.github`, `.cursor`, `.codex`, `.gemini`, `.opencode`/`opencode.json`, `.devin`),
-pre-selects them, and installs only those.
+templates. It scans the repository you pass and pre-selects every provider it offers, so a
+curated setup repo that contains all providers marks all of them — regardless of what the
+current directory happens to have.
 
 ```bash
 npx ai-setup-cli https://github.com/aridanemartin/aridane-martin-ai-setup
@@ -156,9 +156,9 @@ supported:
   paths; shared files such as `AGENTS.md` are written once.
 - **`providers/<id>/`** — one folder per provider, matching the built-in template ids.
 
-Detected providers are pre-selected. When the project has none of the markers, the CLI shows
-the same picker as the no-argument flow, scoped to the providers the source offers — so you can
-still install from a repo a project doesn't know about yet.
+Every provider found in the source is pre-selected; deselect any you don't want before
+confirming. Pre-selection is based on the fetched repository, not on markers in the current
+directory, so pointing at a repo that contains all providers offers that whole setup.
 
 | Flag | Effect |
 |------|--------|
